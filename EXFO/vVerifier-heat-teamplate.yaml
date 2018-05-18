@@ -1,0 +1,56 @@
+heat_template_version: pike
+ 
+description: Launch a vVerifier instance with 
+             using 'm1.verifier' flavor, 'vverifier-image' image, 
+             'int-demo-net' network and 'vverifier-secgroup' security group.
+
+parameters: 
+  FlavorID: 
+    type: string 
+    description: Type of instance (flavor) to use for the instance. 
+    default: m1.verifier 
+ 
+  ImageID: 
+    type: string 
+    description: Image ID to use for the the instance.
+    default: vverifier-image 
+ 
+  NetID: 
+    type: string 
+    description: Network ID to use for the instance.
+    default: int-demo-net 
+ 
+  SecurityGroupID: 
+    type: string 
+    description: Network ID to use for the instance.
+    default: vverifiersecgroup
+ 
+resources: 
+  vVerifier: 
+    type: OS::Nova::Server 
+    availability_zone: Compute1
+    properties: 
+      image: { get_param: ImageID } 
+      flavor: { get_param: FlavorID } 
+      networks: [ network: { get_param: NetID }]
+      security_groups: [{ get_param: SecurityGroupID }]
+      user_data: | 
+          serial=B00000000004
+          u-key=B379458F3404372AFEE54C6232627673D6917C620D3DB96E
+          nl-key=FD3E9E4CDFBF9457B5161092DA8FA846E9D9F740BF1CFDC7
+          local-discovery-host=10.10.20.110
+          discovery-port=2000
+          terminal-telnet=yes
+          terminal-ssh=yes
+          terminal-ssh-authentication=password-and-keys
+          name-server=10.17.1.21
+          domain-name=ma.exfonet.com
+
+outputs: 
+  vVerifier_name:
+    description: Name of the vVerifier instance.
+    value: { get_attr: [ vVerifier, name ] }
+  vVerifier_ip:
+    description: IP address of the vVerifier instance.
+    value: { get_attr: [ vVerifier, first_address ] } 
+
