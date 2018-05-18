@@ -1,0 +1,17 @@
+# Base URL: /tmf-api/serviceTestManagement
+# Version: 2.0
+# 
+
+POST {{server}}/serviceTest
+Content-Type: application/json
+
+{
+  "description": "EXFO Service Assurance Contineous Test (every 1 sec)",   
+  "Name":"Ping Active Test",
+  "mode" : "on-demand",
+  "startDateTime": "2018-05-10 10:00",
+  "endDateTime": "2018-05-10 10:05",
+  "serviceTestCharacteristic": {
+    "name":"com.brixnet.pingactivetest"
+  }
+}
